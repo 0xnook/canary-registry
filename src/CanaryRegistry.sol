@@ -70,14 +70,14 @@ contract CanaryRegistry {
             newCanary.feeders[feeders[i]] = true;
         }
 
-        ++nextCanaryId;
-
         // Additional validation for configuration
         // Example: Ensure the threshold is not greater than the number of feeders
         require(threshold <= feeders.length, "Threshold cannot be greater than the number of feeders");
 
         // Emit an event or perform other actions as needed
         emit CanaryCreated(nextCanaryId, name, message, frequency, threshold, feeders, msg.sender, expiryTimestamp);
+
+        ++nextCanaryId;
     }
 
     function feed(uint256 canaryId) external onlyFeeder(canaryId) notExpired(canaryId) {
