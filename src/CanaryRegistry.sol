@@ -20,7 +20,7 @@ contract CanaryRegistry {
         address creator;
     }
 
-    event CanaryCreated(uint256 canaryId, string name, string message, uint256 frequency, uint256 threshold, address[] feeders, address creator);
+    event CanaryCreated(uint256 canaryId, string name, string message, uint256 frequency, uint256 threshold, address[] feeders, address creator, uint256 expiryTimestamp);
     event CanaryFed(uint256 canaryId, address feeder, uint256 timestamp);
     event CanaryFullyFed(uint256 canaryId, uint256 timestamp);
 
@@ -77,7 +77,7 @@ contract CanaryRegistry {
         require(threshold <= feeders.length, "Threshold cannot be greater than the number of feeders");
 
         // Emit an event or perform other actions as needed
-        emit CanaryCreated(nextCanaryId, name, message, frequency, threshold, feeders, msg.sender);
+        emit CanaryCreated(nextCanaryId, name, message, frequency, threshold, feeders, msg.sender, expiryTimestamp);
     }
 
     function feed(uint256 canaryId) external onlyFeeder(canaryId) notExpired(canaryId) {
