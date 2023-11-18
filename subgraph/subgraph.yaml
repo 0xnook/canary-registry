@@ -6,9 +6,9 @@ dataSources:
     name: CanaryRegistry
     network: goerli
     source:
-      address: "0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408"
+      address: "0x7a8a94eDb80b1524eee1ccB664b8A4a81578d2C2"
       abi: CanaryRegistry
-      startBlock: 10066635
+      startBlock: 10067434
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
