@@ -3,7 +3,7 @@ pragma solidity ^0.8.18;
 
 contract CanaryRegistry {
     mapping(uint256 => Canary) public canaries;
-    uint256 nextCanaryId = 0;
+    uint256 public nextCanaryId = 0;
 
     struct Canary {
         uint256 id;
