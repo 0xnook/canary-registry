@@ -1,5 +1,5 @@
 let canaryContract;
-const goerliContract = "0xf8388c7Aa43D98bd04d9956f082f034E52e54B60";
+const goerliContract = "0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408";
 
 const network = "goerli"; // "gorli" // "rinkeby" // "mainnet"
 
@@ -226,6 +226,26 @@ const canaryAbi = [
   },
 ];
 
+let tableData = fetch(
+  "https://api.studio.thegraph.com/query/16231/canary-registry-test/v0.0.5",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `{
+        canaries {
+          id
+          name
+          message
+          creator
+          expiryTimestamp
+          isAlive
+        }
+      }`,
+    }),
+  }
+);
+
 function createCanary(name, message, frequency, threshold, feeders) {
   const canaryRegistry = new ethers.Contract(
     canaryContract,
@@ -269,7 +289,7 @@ const Form = () => (
       onChange={(e) => State.update({ inputFrequency: e.target.value })}
     />
     <input
-      placeholder="Input feeder addresses"
+      placeholder="Input feeder addresses (comma separated)"
       value={state.inputFeederAddresses}
       onChange={(e) =>
         State.update({ inputFeederAddresses: e.target.value.split(",") })
@@ -302,12 +322,104 @@ const FormStyle = styled.div`
   border: 1px solid black;
   border-radius: 5px;
   padding: 3px;
-  width: 20rem;
+  width: 30rem;
   text-align: center;
 `;
 
 const CreateCanary = () => {
   return <div class="create-canary-form">New Canary</div>;
+};
+
+const CanaryTable = ({ data }) => {
+  const columns = ["ID", "Name", "Message", "Creator", "Expiry", "Is Alive"];
+
+  return (
+    <table
+      style={{ borderSpacing: "0", width: "100%", borderCollapse: "collapse" }}
+    >
+      <thead>
+        <tr style={{ borderBottom: "1px solid #ddd", background: "#f2f2f2" }}>
+          {columns.map((column) => (
+            <th key={column} style={{ padding: "8px", textAlign: "left" }}>
+              {column}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.canaries.map((canary) => (
+          <tr key={canary.id} style={{ borderBottom: "1px solid #ddd" }}>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "50px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {canary.id}
+            </td>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "150px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {canary.name}
+            </td>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "150px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {canary.message}
+            </td>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "200px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {canary.creator}
+            </td>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "150px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {canary.expiryTimestamp}
+            </td>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "80px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {canary.isAlive.toString()}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 };
 
 return (
@@ -316,5 +428,6 @@ return (
     <FormStyle>
       <Form />
     </FormStyle>
+    <CanaryTable data={tableData.body.data} />
   </Wrapper>
 );
