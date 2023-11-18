@@ -226,11 +226,16 @@ const canaryAbi = [
   },
 ];
 
-const canaryRegistry = new ethers.Contract(
-  canaryContract,
-  canaryAbi,
-  Ethers.provider().signer
-);
+function createCanary(name, message, frequency, threshold, feeders) {
+  const canaryRegistry = new ethers.Contract(
+    canaryContract,
+    canaryAbi,
+    Ethers.provider().getSigner()
+  );
+  const freq = ethers.BigNumber.from(frequency * 86400);
+  const thres = ethers.BigNumber.from(threshold);
+  canaryRegistry.hatchCanary(name, message, freq, thres, feeders);
+}
 
 const Wrapper = styled.div`
   display: flex;
@@ -242,37 +247,54 @@ const Wrapper = styled.div`
   padding: 5px;
 `;
 
-const FeederAddressesInput = () => {
-  var inputs = [];
-  for (var i = 0; i < state.feederCount; i++) {
-    inputs.push(<input placeholder={`Feeder ${i} address`} />);
-  }
-  return inputs;
-};
+State.init({ inputFeederAddresses: [] });
 
 const Form = () => (
   <>
     <CreateCanary />
-    <input placeholder="Name" />
-    <input placeholder="Message" />
-    <input placeholder="Frequency" />
     <input
-      type="number"
-      min="1"
-      max="10"
-      placeholder="Feeder count"
-      value={state.feederCount}
-      onChange={(e) => State.update({ feederCount: e.target.value })}
+      placeholder="Name"
+      value={state.inputName}
+      onChange={(e) => State.update({ inputName: e.target.value })}
     />
-    <FeederAddressesInput />
-
+    <input
+      placeholder="Message"
+      value={state.inputMessage}
+      onChange={(e) => State.update({ inputMessage: e.target.value })}
+    />
+    <input
+      type="number"
+      placeholder="Frequency (days)"
+      value={state.inputFrequency}
+      onChange={(e) => State.update({ inputFrequency: e.target.value })}
+    />
+    <input
+      placeholder="Input feeder addresses"
+      value={state.inputFeederAddresses}
+      onChange={(e) =>
+        State.update({ inputFeederAddresses: e.target.value.split(",") })
+      }
+    />
     <input
       type="number"
       min="1"
-      max={state.feederCount}
+      max={state.inputFeederCount}
       placeholder="Feeder threshold"
+      onChange={(e) => State.update({ inputFeederCount: e.target.value })}
     />
-    <button>Create Canary</button>
+    <button
+      onClick={() =>
+        createCanary(
+          state.inputName,
+          state.inputMessage,
+          state.inputFrequency,
+          state.inputFeederCount,
+          state.inputFeederAddresses
+        )
+      }
+    >
+      Create Canary
+    </button>
   </>
 );
 
@@ -290,7 +312,7 @@ const CreateCanary = () => {
 
 return (
   <Wrapper>
-    {<Web3Connect connectLabel="Connect with Web3" />}
+    <Web3Connect connectLabel="Connect with Web3" />
     <FormStyle>
       <Form />
     </FormStyle>
