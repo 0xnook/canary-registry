@@ -1,0 +1,46 @@
+type Canary @entity {
+  id: String!
+  canaryId: BigInt! # uint256
+  name: String! # string
+  message: String! # string
+  frequency: BigInt! # uint256
+  threshold: BigInt! # uint256
+  feeders: [Bytes!]! # address[]
+  creator: Bytes! # address
+  isAlive: Boolean!
+  expiryTimestamp: BigInt!
+}
+
+type CanaryCreated @entity(immutable: true) {
+  id: Bytes!
+  canaryId: BigInt! # uint256
+  name: String! # string
+  message: String! # string
+  frequency: BigInt! # uint256
+  threshold: BigInt! # uint256
+  feeders: [Bytes!]! # address[]
+  creator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  expiryTimestamp: BigInt!
+}
+
+type CanaryFed @entity(immutable: true) {
+  id: Bytes!
+  canaryId: BigInt! # uint256
+  feeder: Bytes! # address
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CanaryFullyFed @entity(immutable: true) {
+  id: Bytes!
+  canaryId: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

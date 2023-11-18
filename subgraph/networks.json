@@ -1,0 +1,8 @@
+{
+  "goerli": {
+    "CanaryRegistry": {
+      "address": "0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408",
+      "startBlock": 10066635
+    }
+  }
+}
