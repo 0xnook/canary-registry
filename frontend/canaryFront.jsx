@@ -1,5 +1,5 @@
 let canaryContract;
-const goerliContract = "0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408";
+const goerliContract = "0x7a8a94eDb80b1524eee1ccB664b8A4a81578d2C2";
 
 const network = "goerli"; // "gorli" // "rinkeby" // "mainnet"
 
@@ -227,7 +227,7 @@ const canaryAbi = [
 ];
 
 let tableData = fetch(
-  "https://api.studio.thegraph.com/query/16231/canary-registry-test/v0.0.5",
+  "https://api.studio.thegraph.com/query/16231/canary-registry-test/v0.0.24",
   {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -240,6 +240,7 @@ let tableData = fetch(
           creator
           expiryTimestamp
           isAlive
+          createdAt
         }
       }`,
     }),
@@ -255,6 +256,15 @@ function createCanary(name, message, frequency, threshold, feeders) {
   const freq = ethers.BigNumber.from(frequency * 86400);
   const thres = ethers.BigNumber.from(threshold);
   canaryRegistry.hatchCanary(name, message, freq, thres, feeders);
+}
+
+function feedCanary(canaryId) {
+  const canaryRegistry = new ethers.Contract(
+    canaryContract,
+    canaryAbi,
+    Ethers.provider().getSigner()
+  );
+  canaryRegistry.feed(canaryId);
 }
 
 const Wrapper = styled.div`
@@ -331,7 +341,17 @@ const CreateCanary = () => {
 };
 
 const CanaryTable = ({ data }) => {
-  const columns = ["ID", "Name", "Message", "Creator", "Expiry", "Is Alive"];
+  if (!data) return "";
+
+  const columns = [
+    "ID",
+    "Name",
+    "Message",
+    "Creator",
+    "Expiry",
+    "Is Alive",
+    "Feed",
+  ];
 
   return (
     <table
@@ -414,6 +434,17 @@ const CanaryTable = ({ data }) => {
               }}
             >
               {canary.isAlive.toString()}
+            </td>
+            <td
+              style={{
+                padding: "8px",
+                maxWidth: "80px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              <button onClick={()=>feedCanary(canary.id)}>Feed</button>
             </td>
           </tr>
         ))}
