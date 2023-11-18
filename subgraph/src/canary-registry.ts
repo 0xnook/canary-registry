@@ -26,7 +26,7 @@ export function handleCanaryCreated(event: CanaryCreatedEvent): void {
   entity.save()
 
   let canaryList = CanaryList.load("0");
-  if(canaryList == null) {
+  if (canaryList == null) {
     canaryList = new CanaryList("0");
     canaryList.nextCanaryId = BigInt.fromI32(0);
   }
@@ -78,16 +78,15 @@ export function handleCanaryFullyFed(event: CanaryFullyFedEvent): void {
 
 export function handleBlock(block: ethereum.Block): void {
   let canaryList = CanaryList.load("0");
-  if(canaryList == null) return;
-  let nextCanaryId = canaryList.nextCanaryId;
+  if (canaryList == null) return;
+  let nextCanaryId = canaryList.nextCanaryId.toI32();
 
-  for (let i = new BigInt(0); i < nextCanaryId; i.plus(new BigInt(1))) {
-    log.info(`KEYWORD {}`, [i.toString()]);
-    // let canary = Canary.load(i.toString())
-    // if(!canary) continue;
-    // if(canary.expiryTimestamp.lt(block.timestamp)) {
-    //   canary.isAlive = false;
-    //   canary.save()
-    // }
+  for (let i = 0; i < nextCanaryId; i++) {
+    let canary = Canary.load(i.toString())
+    if (!canary) continue;
+    if (canary.expiryTimestamp.lt(block.timestamp)) {
+      canary.isAlive = false;
+      canary.save()
+    }
   }
 }
