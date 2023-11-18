@@ -11,7 +11,8 @@ contract CanaryRegistry {
         string message;
         uint256 frequency;
         uint256 threshold;
-        address[] feeders;
+        mapping(address => bool) feeders;
+        address[] feedersIterable;
         uint256 initializationTimestamp;
         uint256 expiryTimestamp;
         mapping(address => bool) hasCalledFeed;
@@ -24,16 +25,7 @@ contract CanaryRegistry {
     event CanaryFullyFed(uint256 canaryId, uint256 timestamp);
 
     modifier onlyFeeder(uint256 canaryId) {
-        Canary storage canary = canaries[canaryId];
-        require(canary.hasCalledFeed[msg.sender] == false, "Feeder has already called feed");
-        bool isFeeder = false;
-        for (uint256 i = 0; i < canary.feeders.length; i++) {
-            if (canary.feeders[i] == msg.sender) {
-                isFeeder = true;
-                break;
-            }
-        }
-        require(isFeeder, "Only valid feeders can perform this action");
+        require(canaries[canaryId].feeders[msg.sender] == true, "Only valid feeders can perform this action");
         _;
     }
 
@@ -68,10 +60,15 @@ contract CanaryRegistry {
         newCanary.message = message;
         newCanary.frequency = frequency;
         newCanary.threshold = threshold;
-        newCanary.feeders = feeders;
         newCanary.initializationTimestamp = initializationTimestamp;
         newCanary.expiryTimestamp = expiryTimestamp;
         newCanary.creator = msg.sender;
+        newCanary.feedersIterable = feeders;
+
+        // Add feeders to the canary
+        for (uint256 i = 0; i < feeders.length; i++) {
+            newCanary.feeders[feeders[i]] = true;
+        }
 
         ++nextCanaryId;
 
@@ -101,8 +98,9 @@ contract CanaryRegistry {
             emit CanaryFullyFed(canaryId, block.timestamp);
             // Reset the feeder count and hasCalledFeed mapping
             canary.feederCount = 0;
-            for (uint256 i = 0; i < canary.feeders.length; i++) {
-                canary.hasCalledFeed[canary.feeders[i]] = false;
+
+            for (uint256 i = 0; i < canary.feedersIterable.length; i++) {
+                canary.hasCalledFeed[canary.feedersIterable[i]] = false;
             }
         }
     }
