@@ -27,4 +27,6 @@ dataSources:
           handler: handleCanaryFed
         - event: CanaryFullyFed(uint256,uint256)
           handler: handleCanaryFullyFed
+      blockHandlers:
+        - handler: handleBlock
       file: ./src/canary-registry.ts

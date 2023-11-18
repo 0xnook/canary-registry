@@ -5,7 +5,7 @@ import {
   CanaryFullyFed as CanaryFullyFedEvent,
   CanaryRegistry
 } from "../generated/CanaryRegistry/CanaryRegistry"
-import { Canary, CanaryCreated, CanaryFed, CanaryFullyFed } from "../generated/schema"
+import { Canary, CanaryCreated, CanaryFed, CanaryFullyFed, CanaryList } from "../generated/schema"
 
 export function handleCanaryCreated(event: CanaryCreatedEvent): void {
   let entity = new CanaryCreated(
@@ -18,13 +18,20 @@ export function handleCanaryCreated(event: CanaryCreatedEvent): void {
   entity.threshold = event.params.threshold
   entity.feeders = changetype<Bytes[]>(event.params.feeders)
   entity.creator = event.params.creator
-
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
   entity.expiryTimestamp = event.params.expiryTimestamp
 
   entity.save()
+
+  let canaryList = CanaryList.load("0");
+  if(canaryList == null) {
+    canaryList = new CanaryList("0");
+    canaryList.nextCanaryId = BigInt.fromI32(0);
+  }
+  canaryList.nextCanaryId = canaryList.nextCanaryId.plus(BigInt.fromI32(1));
+  canaryList.save();
 
   let canary = new Canary(event.params.canaryId.toString())
   canary.canaryId = event.params.canaryId
@@ -36,6 +43,7 @@ export function handleCanaryCreated(event: CanaryCreatedEvent): void {
   canary.creator = event.params.creator
   canary.expiryTimestamp = event.params.expiryTimestamp
   canary.isAlive = true
+  canary.createdAt = event.block.timestamp
   canary.save()
 }
 
@@ -69,12 +77,14 @@ export function handleCanaryFullyFed(event: CanaryFullyFedEvent): void {
 }
 
 export function handleBlock(block: ethereum.Block): void {
-  let contract = CanaryRegistry.bind(Address.fromString("0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408"))
+  let canaryList = CanaryList.load("0");
+  if(canaryList == null) return;
+  let nextCanaryId = canaryList.nextCanaryId;
 
-  for (let i = new BigInt(0); i < contract.nextCanaryId(); i.plus(new BigInt(1))) {
-    const isAlive = contract.isCanaryAlive(i)
+  for (let i = new BigInt(0); i < nextCanaryId; i.plus(new BigInt(1))) {
     let canary = Canary.load(i.toString())
-    if(!isAlive && canary) {
+    if(!canary) continue;
+    if(canary.expiryTimestamp.lt(block.timestamp)) {
       canary.isAlive = false;
       canary.save()
     }
