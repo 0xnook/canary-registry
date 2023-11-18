@@ -1,4 +1,4 @@
-import { Address, ethereum, BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { Address, ethereum, BigInt, Bytes, log } from "@graphprotocol/graph-ts"
 import {
   CanaryCreated as CanaryCreatedEvent,
   CanaryFed as CanaryFedEvent,
@@ -82,11 +82,12 @@ export function handleBlock(block: ethereum.Block): void {
   let nextCanaryId = canaryList.nextCanaryId;
 
   for (let i = new BigInt(0); i < nextCanaryId; i.plus(new BigInt(1))) {
-    let canary = Canary.load(i.toString())
-    if(!canary) continue;
-    if(canary.expiryTimestamp.lt(block.timestamp)) {
-      canary.isAlive = false;
-      canary.save()
-    }
+    log.info(`KEYWORD {}`, [i.toString()]);
+    // let canary = Canary.load(i.toString())
+    // if(!canary) continue;
+    // if(canary.expiryTimestamp.lt(block.timestamp)) {
+    //   canary.isAlive = false;
+    //   canary.save()
+    // }
   }
 }
