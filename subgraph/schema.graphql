@@ -50,3 +50,16 @@ type CanaryFullyFed @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+
+type EpnsNotificationCounter @entity {
+  id: ID!
+  totalCount: BigInt!
+}
+
+type EpnsPushNotification @entity {
+  id: ID!
+  notificationNumber: BigInt!
+  recipient: String!
+  notification: String!
+}

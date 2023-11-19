@@ -4,8 +4,8 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "auth": "graph auth https://api.studio.thegraph.com/deploy/ d5c7e70c5822224d2693ea7d6c8422ec",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ canary-registry-test",
+    "init": "graph init --product hosted-service prateekreddy/canary-test",
+    "deploy": "graph deploy --product hosted-service prateekreddy/canary-test",
     "test": "graph test"
   },
   "dependencies": {

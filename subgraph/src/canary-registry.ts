@@ -6,6 +6,7 @@ import {
   CanaryRegistry
 } from "../generated/CanaryRegistry/CanaryRegistry"
 import { Canary, CanaryCreated, CanaryFed, CanaryFullyFed, CanaryList } from "../generated/schema"
+import { sendPushNotification } from "./PushNotification";
 
 export function handleCanaryCreated(event: CanaryCreatedEvent): void {
   let entity = new CanaryCreated(
@@ -84,7 +85,14 @@ export function handleBlock(block: ethereum.Block): void {
   for (let i = 0; i < nextCanaryId; i++) {
     let canary = Canary.load(i.toString())
     if (!canary) continue;
-    if (canary.expiryTimestamp.lt(block.timestamp)) {
+    if (canary.expiryTimestamp.lt(block.timestamp) && canary.isAlive) {
+      let noOfCanaryFeeders = canary.feeders.length;
+      for(let j = 0; j < noOfCanaryFeeders; j++) {
+        let title = "Canary Expired";
+        let body = `Canary ${canary.name} Died!`;
+        let message = `\"title\": \"${title}\", \"body\": \"${body}\"`
+        sendPushNotification("*", message);
+      }
       canary.isAlive = false;
       canary.save()
     }
