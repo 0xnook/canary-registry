@@ -33,9 +33,7 @@ Contracts using foundry, decentralized frontend using Near's BOS, contract index
 
 Figma design at: [https://www.figma.com/file/JvVHn3zi6PYXWrsDgaVpum/Untitled?type=design&node-id=0-1&mode=design](https://www.figma.com/file/JvVHn3zi6PYXWrsDgaVpum/Untitled?type=design&node-id=0-1&mode=design)
 
-Demo at: [https://near.social/db30db3dd6d9a0b66da535706e04d4f9fc7f5d0ff5cd3f5da99f6f0d267a593f/widget/CanaryRegistry](https://near.social/db30db3dd6d9a0b66da535706e04d4f9fc7f5d0ff5cd3f5da99f6f0d267a593f/widget/CanaryRegistry)
-
-
+Demo at: [https://near.org/db30db3dd6d9a0b66da535706e04d4f9fc7f5d0ff5cd3f5da99f6f0d267a593f/widget/CanaryRegistry](https://near.org/db30db3dd6d9a0b66da535706e04d4f9fc7f5d0ff5cd3f5da99f6f0d267a593f/widget/CanaryRegistry)
 Contract Deployments:
 
 * Goeiuirli: [https://goerli.etherscan.io/address/0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408](https://goerli.etherscan.io/address/0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408)
