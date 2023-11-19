@@ -40,3 +40,12 @@ Contract Deployments:
 * Arbitrum Sepolia: [https://sepolia.arbiscan.io/address/0x4d53D41692A54E3ed1A64BB4d0Ce46afFae6D201](https://sepolia.arbiscan.io/address/0x4d53D41692A54E3ed1A64BB4d0Ce46afFae6D201)
 * Chilliz Spicy Testnet: [https://spicy-explorer.chiliz.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8/transactions#address-tabs](https://spicy-explorer.chiliz.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8/transactions#address-tabs)
 * Mumbai Polygon Testnet: [https://mumbai.polygonscan.com/address/0xbEdEAdEc72369DA7f0FCBcE60C366C341CCD05D3](https://mumbai.polygonscan.com/address/0xbEdEAdEc72369DA7f0FCBcE60C366C341CCD05D3)
+
+## Stretch goals
+
+We wanted to use CowSwap programatic order framework, to demonstrate deadman-switch-like capabilities of performing actions on canary deaths, as in the following scenario.
+
+Alice owns 5% of the FakeDAO circulating supply.
+Alice is really interested in FakeDAO feeding its canary.
+Ahead of time, Alice can create a CowSwap programatic order that will dump FakeDAO's token, on the canary death.
+Hence, Alice can programatically signal her intent ahead of time in the case of a canary death, while enjoying some MEV protection. 
