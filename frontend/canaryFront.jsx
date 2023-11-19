@@ -267,6 +267,41 @@ function feedCanary(canaryId) {
   canaryRegistry.feed(canaryId);
 }
 
+State.init({ creators: [] });
+
+// TODO: stop the flicker
+let updating = false;
+function reverseEnsLookup(address, i) {
+  Ethers.provider()
+    .lookupAddress(address)
+    .then((name) => {
+      if (name) {
+        const newCreators = Array.from(state.creators);
+        newCreators[i] = name;
+        State.update({ creators: newCreators }).then(() => (updating = false));
+      } else {
+        const newCreators = Array.from(state.creators);
+        newCreators[i] = address;
+        State.update({ creators: newCreators }).then(() => (updating = false));
+      }
+    });
+}
+
+// TODO: stop flicker
+useEffect(() => {
+  if (state.creators.length != table.body.data.canaries.length) {
+    tableData.body.data.canaries.map((e, i) => reverseEnsLookup(e.creator, i));
+  }
+}, [state.creators]);
+
+function formatExpiry(timestamp) {
+  const days = Math.floor((timestamp - Date.now() / 1000) / 86400);
+  if (days < 0) {
+    return "expired";
+  }
+  return days.toString() + " days";
+}
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -367,7 +402,7 @@ const CanaryTable = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.canaries.map((canary) => (
+        {data.canaries.map((canary, i) => (
           <tr key={canary.id} style={{ borderBottom: "1px solid #ddd" }}>
             <td
               style={{
@@ -411,7 +446,7 @@ const CanaryTable = ({ data }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              {canary.creator}
+              {state.creators[i]}
             </td>
             <td
               style={{
@@ -422,7 +457,7 @@ const CanaryTable = ({ data }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              {canary.expiryTimestamp}
+              {formatExpiry(canary.expiryTimestamp)}
             </td>
             <td
               style={{
@@ -444,7 +479,7 @@ const CanaryTable = ({ data }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              <button onClick={()=>feedCanary(canary.id)}>Feed</button>
+              <button onClick={() => feedCanary(canary.id)}>Feed</button>
             </td>
           </tr>
         ))}
