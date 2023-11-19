@@ -40,6 +40,7 @@ Contract Deployments:
 * Arbitrum Sepolia: [https://sepolia.arbiscan.io/address/0x4d53D41692A54E3ed1A64BB4d0Ce46afFae6D201](https://sepolia.arbiscan.io/address/0x4d53D41692A54E3ed1A64BB4d0Ce46afFae6D201)
 * Chilliz Spicy Testnet: [https://spicy-explorer.chiliz.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8/transactions#address-tabs](https://spicy-explorer.chiliz.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8/transactions#address-tabs)
 * Mumbai Polygon Testnet: [https://mumbai.polygonscan.com/address/0xbEdEAdEc72369DA7f0FCBcE60C366C341CCD05D3](https://mumbai.polygonscan.com/address/0xbEdEAdEc72369DA7f0FCBcE60C366C341CCD05D3)
+* Scroll Sepolia Testnet: [https://sepolia.scrollscan.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8](https://sepolia.scrollscan.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8)
 
 ## Stretch goals
 
