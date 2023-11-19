@@ -38,3 +38,4 @@ Contract Deployments:
 
 * Goeiuirli: [https://goerli.etherscan.io/address/0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408](https://goerli.etherscan.io/address/0x05D188E571cEdBab42860CFf1c3F68a5E1ef9408)
 * Arbitrum Sepolia: [https://sepolia.arbiscan.io/address/0x4d53D41692A54E3ed1A64BB4d0Ce46afFae6D201](https://sepolia.arbiscan.io/address/0x4d53D41692A54E3ed1A64BB4d0Ce46afFae6D201)
+* Chilliz Spicy Testnet: [https://spicy-explorer.chiliz.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8/transactions#address-tabs](https://spicy-explorer.chiliz.com/address/0x2Df970bba00df87554791223A8A15711f9b8BdD8/transactions#address-tabs)
