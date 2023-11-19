@@ -1,0 +1,32 @@
+specVersion: 0.0.8
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CanaryRegistry
+    network: arbitrum-sepolia
+    source:
+      address: "0x1Bf7A4e41dB90D94bAd2cf12ED0b80D9d369Cf0F"
+      abi: CanaryRegistry
+      startBlock: 1248171
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CanaryCreated
+        - CanaryFed
+        - CanaryFullyFed
+      abis:
+        - name: CanaryRegistry
+          file: ./abis/CanaryRegistry.json
+      eventHandlers:
+        - event: CanaryCreated(uint256,string,string,uint256,uint256,address[],address,uint256)
+          handler: handleCanaryCreated
+        - event: CanaryFed(uint256,address,uint256)
+          handler: handleCanaryFed
+        - event: CanaryFullyFed(uint256,uint256)
+          handler: handleCanaryFullyFed
+      blockHandlers:
+        - handler: handleBlock
+      file: ./src/canary-registry.ts

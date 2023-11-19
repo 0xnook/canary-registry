@@ -4,8 +4,8 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "init": "graph init --product hosted-service prateekreddy/canary-test",
     "deploy": "graph deploy --product hosted-service prateekreddy/canary-test",
+    "deploy-arb": "graph deploy --product hosted-service prateekreddy/canary-test-arb1 subgraph-arb.yaml",
     "test": "graph test"
   },
   "dependencies": {
